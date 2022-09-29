@@ -34,9 +34,9 @@ export default () => {
 		}
 	}, [socketConnected]);
 
-	const { content, type } = slide;
+	const { content } = slide;
 
-	if (content && type) {
+	if (content) {
 		return (
 			<Background
 				style={{ backgroundColor: defaultSettings.backgroundColor }}
