@@ -34,6 +34,7 @@ export default () => {
 		}
 	}, [socketConnected]);
 
+	// could use { content, type } but didn't need 'type' for anything
 	const { content } = slide;
 
 	if (content) {
