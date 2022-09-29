@@ -4,6 +4,7 @@ import { Background, Layout, Lyrics, Title } from "./styles";
 
 import Canvas from "../../components/Canvas";
 import React from "react";
+import baseURL from "../../baseURL";
 import defaultSettings from "../../components/Canvas/defaultSettings";
 import { io } from "socket.io-client";
 
@@ -14,7 +15,8 @@ export default () => {
 		type: undefined,
 	});
 
-	const { current: socket } = React.useRef(io("ws://localhost:5000"));
+	// ws://localhost:5000
+	const { current: socket } = React.useRef(io(baseURL));
 
 	React.useEffect(() => {
 		console.log("connected");

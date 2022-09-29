@@ -4,6 +4,7 @@ import Button from "react-bootstrap/esm/Button";
 import Canvas from "../../components/Canvas";
 import Modal from "react-bootstrap/Modal";
 import React from "react";
+import baseURL from "../../baseURL";
 import fetchSongs from "../../scripts/fetchSongs";
 import { io } from "socket.io-client";
 import { useParams } from "react-router-dom";
@@ -18,7 +19,7 @@ export default () => {
 		sectionIndex: undefined,
 	});
 	const [songs, setSongs] = React.useState([]);
-	const { current: socket } = React.useRef(io("ws://localhost:5000"));
+	const { current: socket } = React.useRef(io(baseURL));
 
 	React.useEffect(() => {
 		socket.on("connect", () => setSocketConnected(true));
