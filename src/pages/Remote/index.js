@@ -1,4 +1,12 @@
-import { Content, Grid, Section, Slide, Title, Wrapper } from "./styles";
+import {
+	Content,
+	Grid,
+	QRImage,
+	Section,
+	Slide,
+	Title,
+	Wrapper,
+} from "./styles";
 
 import Button from "react-bootstrap/esm/Button";
 import Canvas from "../../components/Canvas";
@@ -89,6 +97,13 @@ export default () => {
 				"change",
 				songs.find(({ id }) => songId === id).sections[sectionIndex]
 			);
+
+			localStorage.setItem(
+				"slide",
+				JSON.stringify(
+					songs.find(({ id }) => songId === id).sections[sectionIndex]
+				)
+			);
 		}
 
 		window.addEventListener("keydown", handleKeydown);
@@ -102,7 +117,7 @@ export default () => {
 	const [showModal, setShowModal] = React.useState(true);
 	const handleModalClose = () => setShowModal(false);
 	const handleScreenOpen = () => {
-		window.open("/screen", "_blank", "popup=1");
+		window.open("/local-screen", "_blank", "popup=1");
 
 		handleModalClose();
 	};
@@ -155,6 +170,14 @@ export default () => {
 						</Section>
 				  ))
 				: "Loading..."}
+
+			<Section>
+				<p style={{ textAlign: "center" }}>
+					If someone would like to read the lyrics from a mobile
+					device, they can scan the QR code below.
+				</p>
+				<QRImage />
+			</Section>
 		</Wrapper>
 	);
 };

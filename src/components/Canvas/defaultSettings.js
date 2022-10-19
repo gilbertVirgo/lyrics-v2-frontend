@@ -4,7 +4,7 @@ export default {
 	backgroundColor: "#eeeeee",
 	textColor: "#1a1a1a",
 	font: {
-		size: 114,
+		size: 90,
 		family: `"Helvetica Neue", "Be Vietnam Pro", sans-serif`,
 		weight: 500,
 	},

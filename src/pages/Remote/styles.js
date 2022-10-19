@@ -65,3 +65,12 @@ export const Title = styled.h3`
 	font-weight: 500;
 	margin-bottom: 5px;
 `;
+export const QRImage = styled.img.attrs({
+	src: require("../../assets/global-screen-qr.png"),
+})`
+	display: block;
+	width: 100%;
+	max-width: 300px;
+	max-height: 80vh;
+	margin: 15px auto;
+`;
