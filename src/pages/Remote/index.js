@@ -12,6 +12,7 @@ import Button from "react-bootstrap/esm/Button";
 import Canvas from "../../components/Canvas";
 import Modal from "react-bootstrap/Modal";
 import React from "react";
+import SongChooser from "../../components/SongChooser";
 import baseURL from "../../baseURL";
 import fetchSongs from "../../scripts/fetchSongs";
 import { io } from "socket.io-client";
@@ -172,7 +173,15 @@ export default () => {
 				: "Loading..."}
 
 			<Section>
-				<p style={{ textAlign: "center" }}>
+				<Title>Add a new song</Title>
+				<SongChooser
+					onAddSong={(song) => setSongs((songs) => [...songs, song])}
+				/>
+			</Section>
+
+			<Section>
+				<Title>QR Code</Title>
+				<p>
 					If someone would like to read the lyrics from a mobile
 					device, they can scan the QR code below.
 				</p>
