@@ -15,23 +15,23 @@ import React from "react";
 import SongChooser from "../../components/SongChooser";
 import baseURL from "../../baseURL";
 import fetchSongs from "../../scripts/fetchSongs";
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 import { useParams } from "react-router-dom";
 
 export default () => {
 	const params = useParams();
 	const songIds = params.songIds.split("+");
 
-	const [socketConnected, setSocketConnected] = React.useState(false);
+// 	const [socketConnected, setSocketConnected] = React.useState(false);
 	const [selectedSlide, setSelectedSlide] = React.useState({
 		songId: undefined,
 		sectionIndex: undefined,
 	});
 	const [songs, setSongs] = React.useState([]);
-	const { current: socket } = React.useRef(io(baseURL));
+// 	const { current: socket } = React.useRef(io(baseURL));
 
 	React.useEffect(() => {
-		socket.on("connect", () => setSocketConnected(true));
+// 		socket.on("connect", () => setSocketConnected(true));
 
 		fetchSongs().then((songs) => {
 			setSongs(
@@ -90,14 +90,14 @@ export default () => {
 	React.useEffect(() => {
 		const { songId, sectionIndex } = selectedSlide;
 		if (
-			socketConnected &&
+// 			socketConnected &&
 			songId !== undefined &&
 			sectionIndex !== undefined
 		) {
-			socket.emit(
-				"change",
-				songs.find(({ id }) => songId === id).sections[sectionIndex]
-			);
+// 			socket.emit(
+// 				"change",
+// 				songs.find(({ id }) => songId === id).sections[sectionIndex]
+// 			);
 
 			localStorage.setItem(
 				"slide",
