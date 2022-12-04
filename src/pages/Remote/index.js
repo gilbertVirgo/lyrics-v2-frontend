@@ -110,10 +110,10 @@ export default () => {
 		window.addEventListener("keydown", handleKeydown);
 
 		return () => {
-			socket.removeAllListeners("change");
+// 			socket.removeAllListeners("change");
 			window.removeEventListener("keydown", handleKeydown);
 		};
-	}, [socketConnected, selectedSlide]);
+	}, [/*socketConnected,*/ selectedSlide]);
 
 	const [showModal, setShowModal] = React.useState(true);
 	const handleModalClose = () => setShowModal(false);
