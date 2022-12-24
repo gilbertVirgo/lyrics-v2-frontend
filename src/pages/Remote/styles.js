@@ -52,6 +52,10 @@ Slide.Caption = styled.span.attrs({ className: "slide-caption" })`
 				return "darkgreen";
 			case "Bridge":
 				return "darkred";
+			case "Tag":
+				return "darkorange";
+			case "Pre-Chorus":
+				return "DarkSeaGreen";
 		}
 	}};
 `;
