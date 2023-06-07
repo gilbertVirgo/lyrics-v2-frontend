@@ -1,11 +1,10 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 
 import GlobalScreen from "./pages/GlobalScreen";
 import Home from "./pages/Home";
 import LocalScreen from "./pages/LocalScreen";
-import NewSession from "./pages/NewSession";
 import React from "react";
 import Remote from "./pages/Remote";
 
