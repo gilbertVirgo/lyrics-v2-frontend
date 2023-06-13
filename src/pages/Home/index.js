@@ -6,6 +6,7 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import React from "react";
 import Row from "react-bootstrap/Row";
+import SearchBar from "../../components/SearchBar";
 import fetchSongs from "../../scripts/fetchSongs";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
@@ -25,9 +26,7 @@ const Home = () => {
 		})();
 	}, []);
 
-	const handleAddSong = () => {
-		const song = songs.find(({ title }) => title === songTitle);
-
+	const handleAddSong = (song) => {
 		if (song) {
 			const temp = [...songList, song];
 
@@ -53,32 +52,10 @@ const Home = () => {
 				<h1>Create a new session</h1>
 				<Group>
 					{songs.length ? (
-						<Row>
-							<Col>
-								<Form.Control
-									list="songTitles"
-									value={songTitle}
-									onChange={({ target }) =>
-										setSongTitle(target.value)
-									}
-									onKeyPress={({ key }) =>
-										key === "Enter" && handleAddSong()
-									}
-									datalist={songs.map(({ title }) => title)}
-									placeholder="Pick a song"
-								/>
-								<datalist id="songTitles">
-									{songs.map(({ title }, key) => (
-										<option key={key} value={title} />
-									))}
-								</datalist>
-							</Col>
-							<Col>
-								<Button onClick={handleAddSong} variant="light">
-									+
-								</Button>
-							</Col>
-						</Row>
+						<SearchBar
+							songs={songs}
+							onSongSelected={handleAddSong}
+						/>
 					) : (
 						"Loading..."
 					)}
@@ -88,7 +65,7 @@ const Home = () => {
 						<Alert
 							variant="info"
 							key={key}
-							onClose={handleRemoveSong.bind(null, key)}
+							onClose={() => handleRemoveSong(key)}
 							dismissible
 						>
 							{title}
