@@ -12,41 +12,38 @@ import Button from "react-bootstrap/esm/Button";
 import Canvas from "../../components/Canvas";
 import Modal from "react-bootstrap/Modal";
 import React from "react";
-import SongChooser from "../../components/SongChooser";
-import baseURL from "../../baseURL";
+import SearchBar from "../../components/SearchBar";
 import fetchSongs from "../../scripts/fetchSongs";
-// import { io } from "socket.io-client";
 import { useParams } from "react-router-dom";
 
 export default () => {
 	const params = useParams();
 	const songIds = params.songIds.split("+");
 
-// 	const [socketConnected, setSocketConnected] = React.useState(false);
 	const [selectedSlide, setSelectedSlide] = React.useState({
 		songId: undefined,
 		sectionIndex: undefined,
 	});
 	const [songs, setSongs] = React.useState([]);
-// 	const { current: socket } = React.useRef(io(baseURL));
+	const [selectedSongs, setSelectedSongs] = React.useState([]);
 
 	React.useEffect(() => {
-// 		socket.on("connect", () => setSocketConnected(true));
+		(async function () {
+			let songs = await fetchSongs(),
+				selectedSongs = songIds.map((id) =>
+					songs.find((song) => song.id === id)
+				);
 
-		fetchSongs().then((songs) => {
-			setSongs(
-				songIds.map((exampleID) =>
-					songs.find((song) => song.id === exampleID)
-				)
-			);
-		});
+			setSongs(songs);
+			setSelectedSongs(selectedSongs);
+		})();
 	}, []);
 
 	const handleKeydown = ({ key }) => {
 		const { songId, sectionIndex } = selectedSlide,
 			matchId = ({ id }) => songId === id,
-			song = songs.find(matchId),
-			songIndex = songs.findIndex(matchId);
+			song = selectedSongs.find(matchId),
+			songIndex = selectedSongs.findIndex(matchId);
 
 		console.log({ song, songIndex });
 
@@ -61,9 +58,10 @@ export default () => {
 							});
 						} else if (songIndex - 1 >= 0) {
 							setSelectedSlide({
-								songId: songs[songIndex - 1].id,
+								songId: selectedSongs[songIndex - 1].id,
 								sectionIndex:
-									songs[songIndex - 1].sections.length - 1,
+									selectedSongs[songIndex - 1].sections
+										.length - 1,
 							});
 						}
 					})();
@@ -75,9 +73,9 @@ export default () => {
 								songId,
 								sectionIndex: sectionIndex + 1,
 							});
-						} else if (songIndex + 1 < songs.length) {
+						} else if (songIndex + 1 < selectedSongs.length) {
 							setSelectedSlide({
-								songId: songs[songIndex + 1].id,
+								songId: selectedSongs[songIndex + 1].id,
 								sectionIndex: 0,
 							});
 						}
@@ -89,20 +87,13 @@ export default () => {
 
 	React.useEffect(() => {
 		const { songId, sectionIndex } = selectedSlide;
-		if (
-// 			socketConnected &&
-			songId !== undefined &&
-			sectionIndex !== undefined
-		) {
-// 			socket.emit(
-// 				"change",
-// 				songs.find(({ id }) => songId === id).sections[sectionIndex]
-// 			);
-
+		if (songId !== undefined && sectionIndex !== undefined) {
 			localStorage.setItem(
 				"slide",
 				JSON.stringify(
-					songs.find(({ id }) => songId === id).sections[sectionIndex]
+					selectedSongs.find(({ id }) => songId === id).sections[
+						sectionIndex
+					]
 				)
 			);
 		}
@@ -110,10 +101,9 @@ export default () => {
 		window.addEventListener("keydown", handleKeydown);
 
 		return () => {
-// 			socket.removeAllListeners("change");
 			window.removeEventListener("keydown", handleKeydown);
 		};
-	}, [/*socketConnected,*/ selectedSlide]);
+	}, [selectedSlide]);
 
 	const [showModal, setShowModal] = React.useState(true);
 	const handleModalClose = () => setShowModal(false);
@@ -136,8 +126,8 @@ export default () => {
 					</Button>
 				</Modal.Footer>
 			</Modal>
-			{songs
-				? songs.map(({ title, id: songId, ...song }, index) => (
+			{selectedSongs
+				? selectedSongs.map(({ title, id: songId, ...song }, index) => (
 						<Section key={`section-${index}`}>
 							<Title>{title}</Title>
 							<Grid>
@@ -173,19 +163,13 @@ export default () => {
 				: "Loading..."}
 
 			<Section>
-				<Title>Add a new song</Title>
-				<SongChooser
-					onAddSong={(song) => setSongs((songs) => [...songs, song])}
+				<Title>Add another song</Title>
+				<SearchBar
+					songs={songs}
+					onSongSelected={(song) =>
+						setSelectedSongs((songs) => [...songs, song])
+					}
 				/>
-			</Section>
-
-			<Section>
-				<Title>QR Code</Title>
-				<p>
-					If someone would like to read the lyrics from a mobile
-					device, they can scan the QR code below.
-				</p>
-				<QRImage />
 			</Section>
 		</Wrapper>
 	);
