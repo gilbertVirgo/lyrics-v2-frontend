@@ -29,6 +29,7 @@ export default ({ songs, onSongSelected }) => {
 
 			if (lyricSearch) {
 				list.push({
+					id,
 					title,
 					content: lyricSearch.content,
 					lyric: lyricSearch.content
@@ -44,7 +45,7 @@ export default ({ songs, onSongSelected }) => {
 	}, [inputValue]);
 
 	const handleSongSelected = (index) => {
-		onSongSelected(suggestions[index]);
+		onSongSelected(songs.find(({ id }) => id === suggestions[index].id));
 		setInputValue("");
 	};
 
