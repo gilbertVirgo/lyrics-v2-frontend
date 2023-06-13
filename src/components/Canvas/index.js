@@ -45,10 +45,6 @@ export default ({ content, settings = {}, width = "100%" }) => {
 					canvas.width - margin * 2
 				);
 			});
-
-			// drawMultilineText(context, content, {
-			// 	lineHeight,
-			// });
 		}
 	}, [content]);
 
