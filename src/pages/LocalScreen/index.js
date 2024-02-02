@@ -7,6 +7,7 @@ import defaultSettings from "../../components/Canvas/defaultSettings";
 
 export default () => {
 	const [slide, setSlide] = React.useState({
+		image: undefined,
 		content: undefined,
 		type: undefined,
 	});
@@ -25,17 +26,9 @@ export default () => {
 	}, []);
 
 	// could use { content, type } but didn't need 'type' for anything
-	const { content } = slide;
+	const { content, image } = slide;
 
-	if (content) {
-		return (
-			<Background
-				style={{ backgroundColor: defaultSettings.backgroundColor }}
-			>
-				<Canvas content={content} settings={{ textColor: "#1a1a1a" }} />
-			</Background>
-		);
-	} else
+	if (!content && !image)
 		return (
 			<div
 				style={{
@@ -52,4 +45,18 @@ export default () => {
 				<p>Then, select a slide</p>
 			</div>
 		);
+
+	if (image) {
+		return <Canvas image={image} />;
+	}
+
+	if (content) {
+		return (
+			<Background
+				style={{ backgroundColor: defaultSettings.backgroundColor }}
+			>
+				<Canvas content={content} settings={{ textColor: "#1a1a1a" }} />
+			</Background>
+		);
+	}
 };

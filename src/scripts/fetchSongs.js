@@ -1,4 +1,4 @@
-import Prismic from "prismic-javascript";
+import prismicClient from "../prismicClient";
 
 const parse = (json) =>
 	json.map(({ id, data }) => ({
@@ -12,22 +12,7 @@ const parse = (json) =>
 	}));
 
 export default async () => {
-	const api = await Prismic.api(
-		"https://worship-lyrics.cdn.prismic.io/api/v2"
-	);
+	const songs = await prismicClient.getAllByType("song");
 
-	const query = await api.query("", { pageSize: 100 });
-	const { results } = query;
-
-	// Accounting for > 100 songs
-	let pagesLeft = query.total_pages - 1;
-	while (--pagesLeft >= 0) {
-		let nextPage = await api.query("", {
-			pageSize: 100,
-			page: query.total_pages - pagesLeft,
-		});
-		results.push(...nextPage.results);
-	}
-
-	return parse(results);
+	return parse(songs);
 };

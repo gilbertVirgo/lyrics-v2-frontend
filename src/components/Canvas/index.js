@@ -3,7 +3,7 @@ import React from "react";
 import defaultSettings from "./defaultSettings";
 import drawMultilineText from "canvas-multiline-text";
 
-export default ({ content, settings = {}, width = "100%" }) => {
+export default ({ content, image, settings = {}, width = "100%" }) => {
 	const canvasRef = React.useRef(null);
 
 	Object.keys(defaultSettings).forEach((key) => {
@@ -14,8 +14,6 @@ export default ({ content, settings = {}, width = "100%" }) => {
 		if (canvasRef.current) {
 			const { current: canvas } = canvasRef;
 
-			console.log({ settings });
-
 			const { scale, aspectRatio } = settings,
 				[arWidth, arHeight] = aspectRatio.split(":");
 
@@ -25,28 +23,46 @@ export default ({ content, settings = {}, width = "100%" }) => {
 			const context = canvas.getContext("2d"),
 				{ backgroundColor, textColor, font, lineHeight } = settings;
 
-			context.fillStyle = backgroundColor;
-			context.fillRect(0, 0, canvas.width, canvas.height);
+			if (image) {
+				console.log("n i");
 
-			context.fillStyle = textColor;
-			context.font = `${font.weight} ${font.size}px/${
-				lineHeight * font.size
-			}px ${font.family}`;
-			context.fillStyle = textColor;
-			context.textBaseline = "top";
+				const imageElement = new Image();
+				imageElement.onload = () => {
+					context.drawImage(
+						imageElement,
+						0,
+						0,
+						canvas.width,
+						canvas.width * (9 / 16)
+					);
+				};
+				imageElement.src = image;
+			}
 
-			const margin = 30;
+			if (content) {
+				context.fillStyle = backgroundColor;
+				context.fillRect(0, 0, canvas.width, canvas.height);
 
-			content.split("\n").forEach((line, index) => {
-				context.fillText(
-					line,
-					margin,
-					margin + index * (lineHeight * font.size),
-					canvas.width - margin * 2
-				);
-			});
+				context.fillStyle = textColor;
+				context.font = `${font.weight} ${font.size}px/${
+					lineHeight * font.size
+				}px ${font.family}`;
+				context.fillStyle = textColor;
+				context.textBaseline = "top";
+
+				const margin = 30;
+
+				content.split("\n").forEach((line, index) => {
+					context.fillText(
+						line,
+						margin,
+						margin + index * (lineHeight * font.size),
+						canvas.width - margin * 2
+					);
+				});
+			}
 		}
-	}, [content]);
+	}, [content, image]);
 
 	return <Canvas ref={canvasRef} style={{ width }} />;
 };

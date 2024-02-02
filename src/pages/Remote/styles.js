@@ -3,6 +3,10 @@ import styled from "styled-components";
 export const Wrapper = styled.main`
 	box-sizing: border-box;
 	padding: 15px;
+
+	display: flex;
+	flex-direction: column;
+	row-gap: 15px;
 `;
 export const Grid = styled.div`
 	display: grid;
