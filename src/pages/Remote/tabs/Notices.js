@@ -5,17 +5,11 @@ import Canvas from "../../../components/Canvas";
 import React from "react";
 import fetchNoticesSlides from "../../../scripts/fetchNoticesSlides";
 
-export default () => {
-	const [notices, setNotices] = React.useState();
-	const [error, setError] = React.useState();
+export default ({ notices }) => {
 	const [selectedKey, setSelectedKey] = React.useState({
 		section: "this_week",
 		index: 0,
 	});
-
-	React.useEffect(() => {
-		fetchNoticesSlides().then(setNotices).catch(setError);
-	}, []);
 
 	const setSlide = (image) =>
 		localStorage.setItem(
@@ -29,12 +23,6 @@ export default () => {
 
 	return (
 		<React.Fragment>
-			<Modal show={!!error} onExit={setError.bind(null, undefined)}>
-				<Modal.Body>
-					<h1>Error</h1>
-					<p>{error}</p>
-				</Modal.Body>
-			</Modal>
 			<Section>
 				<Title>This week</Title>
 				<Grid>

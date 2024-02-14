@@ -7,13 +7,14 @@ import fetchSongs from "../../../scripts/fetchSongs";
 import handleKeydown from "../helpers/handleKeydown";
 import { useParams } from "react-router-dom";
 
-export default () => {
+export default ({ songs }) => {
 	const params = useParams();
 
 	const songIds = params.songIds.split("+");
 
-	const [songs, setSongs] = React.useState([]);
-	const [selectedSongs, setSelectedSongs] = React.useState([]);
+	const [selectedSongs, setSelectedSongs] = React.useState(
+		songIds.map((id) => songs.find((song) => song.id === id))
+	);
 
 	const [selectedSlide, setSelectedSlide] = React.useState({
 		songId: undefined,
@@ -46,18 +47,6 @@ export default () => {
 			window.removeEventListener("keydown", boundHandleKeyDownFunction);
 		};
 	}, [selectedSlide]);
-
-	React.useEffect(() => {
-		(async function () {
-			let songs = await fetchSongs(), // Get all songs for the search bar
-				selectedSongs = songIds.map((id) =>
-					songs.find((song) => song.id === id)
-				);
-
-			setSongs(songs);
-			setSelectedSongs(selectedSongs);
-		})();
-	}, []);
 
 	return (
 		<React.Fragment>
